@@ -4,6 +4,7 @@ import com.songoda.arconix.plugin.Arconix;
 import com.songoda.epicanchors.EpicAnchorsPlugin;
 import com.songoda.epicanchors.anchor.EAnchor;
 import com.songoda.epicanchors.api.anchor.Anchor;
+import com.songoda.epicanchors.utils.ServerVersion;
 import com.songoda.epicspawners.api.EpicSpawnersAPI;
 import com.songoda.epicspawners.api.spawner.Spawner;
 import org.bukkit.*;
@@ -60,7 +61,9 @@ public class AnchorHandler {
             if (ticksLeft <= 0) {
                 instance.getAnchorManager().removeAnchor(location);
                 Arconix.pl().getApi().packetLibrary.getParticleManager().broadcastParticle(location.clone().add(.5, .5, .5), 0, 0, 0, 0, "LAVA", 10);
-                location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 10, 10);
+                if (instance.isServerVersionAtLeast(ServerVersion.V1_9)) {
+                    location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 10, 10);
+                }
                 location.getBlock().setType(Material.AIR);
                 instance.getMenuHandler().removeAnchor(location);
                 chunk.unload();
@@ -71,7 +74,7 @@ public class AnchorHandler {
                 for (int z = cz; z < cz + 16; z++) {
                     for (int y = 0; y < location.getWorld().getMaxHeight(); y++) {
                         Block block = location.getWorld().getBlockAt(x, y, z);
-                        if (block.getType() != Material.SPAWNER) continue;
+                        if (block.getType() != Material.MOB_SPAWNER) continue;
                         Spawner spawner = EpicSpawnersAPI.getSpawnerManager().getSpawnerFromWorld(block.getLocation());
                         if (!delays.containsKey(block.getLocation())) {
                             if (block == null || block.getLocation() == null || spawner == null) continue;

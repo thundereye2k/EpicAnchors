@@ -4,6 +4,7 @@ import com.songoda.epicanchors.anchor.EAnchor;
 import com.songoda.epicanchors.api.anchor.Anchor;
 import com.songoda.epicanchors.utils.Methods;
 import com.songoda.epicanchors.EpicAnchorsPlugin;
+import com.songoda.epicanchors.utils.ServerVersion;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -44,10 +45,11 @@ public class InteractListeners implements Listener {
             if (player.getGameMode() != GameMode.CREATIVE)
                 Methods.takeItem(player, 1);
 
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6F, 15.0F);
+            if (instance.isServerVersionAtLeast(ServerVersion.V1_9)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6F, 15.0F);
 
-            player.getWorld().spawnParticle(Particle.SPELL_WITCH, anchor.getLocation().add(.5,.5,.5), 100, .5, .5, .5);
-
+                player.getWorld().spawnParticle(Particle.SPELL_WITCH, anchor.getLocation().add(.5, .5, .5), 100, .5, .5, .5);
+            }
             e.setCancelled(true);
 
             return;

@@ -7,6 +7,7 @@ import com.songoda.arconix.plugin.Arconix;
 import com.songoda.epicanchors.EpicAnchorsPlugin;
 import com.songoda.epicanchors.api.anchor.Anchor;
 import com.songoda.epicanchors.utils.Methods;
+import com.songoda.epicanchors.utils.ServerVersion;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -128,8 +129,10 @@ public class EAnchor implements Anchor {
             }
 
             ticksLeft = ticksLeft + 20 * 60 * 30;
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6F, 15.0F);
-            player.getWorld().spawnParticle(Particle.SPELL_WITCH, getLocation().add(.5,.5,.5), 100, .5, .5, .5);
+            if (instance.isServerVersionAtLeast(ServerVersion.V1_9)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6F, 15.0F);
+                player.getWorld().spawnParticle(Particle.SPELL_WITCH, getLocation().add(.5, .5, .5), 100, .5, .5, .5);
+            }
         }
     }
 

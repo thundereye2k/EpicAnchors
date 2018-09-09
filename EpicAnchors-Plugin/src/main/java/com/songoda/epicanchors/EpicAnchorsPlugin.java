@@ -15,7 +15,9 @@ import com.songoda.epicanchors.events.InventoryListeners;
 import com.songoda.epicanchors.handlers.AnchorHandler;
 import com.songoda.epicanchors.handlers.MenuHandler;
 import com.songoda.epicanchors.utils.Methods;
+import com.songoda.epicanchors.utils.ServerVersion;
 import com.songoda.epicanchors.utils.SettingsManager;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +31,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class EpicAnchorsPlugin extends JavaPlugin implements EpicAnchors {
 
     public ConfigWrapper dataFile = new ConfigWrapper(this, "", "data.yml");
+
+    private ServerVersion serverVersion = ServerVersion.fromPackageName(Bukkit.getServer().getClass().getPackage().getName());
 
     private static EpicAnchorsPlugin INSTANCE;
 
@@ -45,14 +49,12 @@ public class EpicAnchorsPlugin extends JavaPlugin implements EpicAnchors {
     }
 
     private boolean checkVersion() {
-        int workingVersion = 13;
-        int currentVersion = Integer.parseInt(Bukkit.getServer().getClass()
-                .getPackage().getName().split("\\.")[3].split("_")[1]);
-
-        if (currentVersion < workingVersion) {
+        int maxVersion = 122; // also supports 1.8 and higher
+        int currentVersion = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
+        if (currentVersion > maxVersion) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
                 Bukkit.getConsoleSender().sendMessage("");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "You installed the 1." + workingVersion + "+ only version of " + this.getDescription().getName() + " on a 1." + currentVersion + " server. Since you are on the wrong version we disabled the plugin for you. Please install correct version to continue using " + this.getDescription().getName() + ".");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "You installed the legacy (1.8 - 1.12) only version of " + this.getDescription().getName() + " on a 1." + currentVersion + " server. Since you are on the wrong version we disabled the plugin for you. Please install correct version to continue using " + this.getDescription().getName() + ".");
                 Bukkit.getConsoleSender().sendMessage("");
             }, 20L);
             return false;
@@ -165,6 +167,23 @@ public class EpicAnchorsPlugin extends JavaPlugin implements EpicAnchors {
         meta.setDisplayName(Arconix.pl().getApi().format().formatText(Methods.formatName(ticks, true)));
         item.setItemMeta(meta);
         return item;
+    }
+
+
+    public ServerVersion getServerVersion() {
+        return serverVersion;
+    }
+
+    public boolean isServerVersion(ServerVersion version) {
+        return serverVersion == version;
+    }
+
+    public boolean isServerVersion(ServerVersion... versions) {
+        return ArrayUtils.contains(versions, serverVersion);
+    }
+
+    public boolean isServerVersionAtLeast(ServerVersion version) {
+        return serverVersion.ordinal() >= version.ordinal();
     }
 
     public MenuHandler getMenuHandler() {
