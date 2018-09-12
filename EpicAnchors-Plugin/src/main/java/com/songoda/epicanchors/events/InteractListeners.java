@@ -28,7 +28,10 @@ public class InteractListeners implements Listener {
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent e) {
 
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            instance.bust(e.getClickedBlock().getLocation());
+            return;
+        }
 
         if (instance.getAnchorManager().getAnchor(e.getClickedBlock().getLocation()) == null) return;
 
