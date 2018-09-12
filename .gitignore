@@ -165,8 +165,6 @@ target/classes/plugin\.yml
 
 \.idea/libraries/Lib1\.xml
 
-\.idea/libraries/spigot_1_12_2\.xml
-
 target/classes/com/songoda/epicanchors/api/utils/ClaimableProtectionPluginHook\.class
 
 target/classes/com/songoda/epicanchors/api/utils/ProtectionPluginHook\.class

@@ -39,6 +39,8 @@ public class AnchorHandler {
         }
     }
 
+    private boolean epicSpawners = instance.getServer().getPluginManager().getPlugin("EpicSpawners") != null;
+
     private void doAnchorCheck() {
         for (Anchor anchor : instance.getAnchorManager().getAnchors().values()) {
 
@@ -69,6 +71,8 @@ public class AnchorHandler {
                 chunk.unload();
             }
 
+
+            if (!epicSpawners) continue;
 
             for (int x = cx; x < cx + 16; x++) {
                 for (int z = cz; z < cz + 16; z++) {
